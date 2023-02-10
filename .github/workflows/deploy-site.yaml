@@ -36,9 +36,23 @@ jobs:
       run: hugo --minify
 
     # push the generated content into the `gh-pages` branch.
-    - name: Deploy
-      uses: peaceiris/actions-gh-pages@v3.9.0
+    #- name: Deploy
+    #  uses: peaceiris/actions-gh-pages@v3.9.0
+    #  with:
+    #    github_token: ${{ secrets.GITHUB_TOKEN }}
+    #    # publish_branch: main
+    #    publish_dir: ./public
+
+
+    - name: Upload a Build Artifact
+      uses: actions/upload-artifact@v3.1.2
       with:
-        github_token: ${{ secrets.GITHUB_TOKEN }}
-        # publish_branch: main
-        publish_dir: ./public
+        name: web
+        path: ./public
+        retention-days: 1
+        
+    - name: Deploy to GitHub Pages
+      id: deployment
+      uses: actions/deploy-pages@v1
+      with:
+        artifact_name: web
